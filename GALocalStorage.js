@@ -1,22 +1,25 @@
 /**
- * Google Analytics for Pokki
+ * Modified version or Google Analytics for Pokki without using pokki at all.
  * For all details and documentation:
- * https://github.com/blakemachado/Pokki
+ * https://github.com/ggendre/GALocalStorage
  *
  * @version     1.6
  * @license     MIT License
- * @author      Blake Machado <blake@sweetlabs.com>, SweetLabs, Inc.
+ * @author      Guillaume Gendre, Haploid.
+ *
+ * Original Work from Pokki team :
+ *              Blake Machado <blake@sweetlabs.com>, SweetLabs, Inc.
  *              Fontaine Shu <fontaine@sweetlabs.com>, SweetLabs, Inc.
- * @copyright   (c) 2011-2012, Authors
+ * see this repository : https://github.com/blakemachado/Pokki
+ *
+ * I just commented out the Pokki stuff for now. help to make it cleaner is welcome.
  *
  * Example usage:
- * - If you want to track the platform version and pokki version in a custom var, 
- *   include this line above the _setAccount and _setDomain:
- *   ga_pokki._initPlatformCustomVar(--SLOT_NUMBER_DEFAULTS_TO_1--);
  * 
- * - Place these two lines with your values at the bottom of popup.html
+ * - Place these two lines with your values in a script tag in the head of index.html
  *   ga_pokki._setAccount('--GA-ACCOUNT-ID--');
  *   ga_pokki._setDomain('--YOUR-DOMAIN--');
+ *   ga_pokki._trackPageview('/index.html');
  *
  * - Call these whenever you want to track a page view or a custom event
  *   ga_pokki._trackPageview('/index', 'optional title');
@@ -71,7 +74,7 @@
         var utmhid = 0; // unique id per session
         
         var event_map = {
-  		hidden: {
+			hidden: {
 				path: '/popup_hidden',
 				event: 'PopupHidden'
 			},
@@ -166,6 +169,7 @@
             }
             
             // initialize session when popup opens
+            /*
             pokki.addEventListener('showing', function() {
                 // don't run the first time
                 if(initialized) {
@@ -178,7 +182,7 @@
                     initialized = true;
                 }
             });
-            
+            */
             
 			var state = 'hidden';
 			var latestState = '';
@@ -224,6 +228,7 @@
 			
 			};
 
+			/*
             pokki.addEventListener('hidden', function() {
             	state = 'hidden';
             	clearTimeout(timer);
@@ -249,10 +254,13 @@
             	clearTimeout(timer);
             	timer = setTimeout(handleState,200);
 			});
+			*/
         }
         
         // public
+        /* commented out until it is adapted to work without Pokki
         this._initPlatformCustomVar = function(customVarSlot) {
+            
             customVarSlot = customVarSlot || 1; // defaults to 1 unless need to specify which
             
             try {
@@ -268,6 +276,7 @@
                 that._setCustomVar(customVarSlot, 'version-campaign', 'pfv_pov_src_cpn');
             }
         };
+        */
         
         // public
         this._setAccount = function(account_id) {
@@ -486,4 +495,3 @@
 		};
     };
 })();
-
