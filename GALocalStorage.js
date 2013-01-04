@@ -17,13 +17,13 @@
  * Example usage:
  * 
  * - Place these two lines with your values in a script tag in the head of index.html
- *   ga_pokki._setAccount('--GA-ACCOUNT-ID--');
- *   ga_pokki._setDomain('--YOUR-DOMAIN--');
- *   ga_pokki._trackPageview('/index.html');
+ *   ga_storage._setAccount('--GA-ACCOUNT-ID--');
+ *   ga_storage._setDomain('--YOUR-DOMAIN--');
+ *   ga_storage._trackPageview('/index.html');
  *
  * - Call these whenever you want to track a page view or a custom event
- *   ga_pokki._trackPageview('/index', 'optional title');
- *   ga_pokki._trackEvent('category', 'action', 'label', 'value');
+ *   ga_storage._trackPageview('/index', 'optional title');
+ *   ga_storage._trackEvent('category', 'action', 'label', 'value');
  */
  
 (function() {
@@ -52,7 +52,7 @@
         };
     };
     
-    ga_pokki = new function() {
+    ga_storage = new function() {
         var that = this;
         var initialized = false;
         
@@ -88,13 +88,13 @@
 			}
         };
         
-        var uid         = new LocalStorage('ga_pokki_uid');
-        var uid_rand    = new LocalStorage('ga_pokki_uid_rand');
-        var session_cnt = new LocalStorage('ga_pokki_session_cnt');
-        var f_session   = new LocalStorage('ga_pokki_f_session');
-        var l_session   = new LocalStorage('ga_pokki_l_session');
-        var first_run   = new LocalStorage('ga_pokki_first_run');
-        var visitor_custom_vars = new LocalStorage('ga_pokki_visitor_custom_vars');
+        var uid         = new LocalStorage('ga_storage_uid');
+        var uid_rand    = new LocalStorage('ga_storage_uid_rand');
+        var session_cnt = new LocalStorage('ga_storage_session_cnt');
+        var f_session   = new LocalStorage('ga_storage_f_session');
+        var l_session   = new LocalStorage('ga_storage_l_session');
+        var first_run   = new LocalStorage('ga_storage_first_run');
+        var visitor_custom_vars = new LocalStorage('ga_storage_visitor_custom_vars');
         
         var c_session = 0;
         var custom_vars = visitor_custom_vars._get() ? JSON.parse(visitor_custom_vars._get()) : ['dummy'];
@@ -241,7 +241,7 @@
             	timer = setTimeout(handleState,200);
 			});
 			
-			// The following window events are only fired IF this ga_pokki library is included in the popup window.
+			// The following window events are only fired IF this ga_storage library is included in the popup window.
 			// If it's in the background, the window will have to manually make pokki.rpc calls to log the focus and blur events.
 			window.addEventListener('focus',function() {
 				state = 'focused';
@@ -453,7 +453,7 @@
             img.src = url;
         };
 		
-		// public - manually call when ga_pokki is included in the background instead of the window/popup because the
+		// public - manually call when ga_storage is included in the background instead of the window/popup because the
 		// window DOM events on the popup won't be heard by the background
 		this._trackBlur = function() {
             var e;
@@ -473,7 +473,7 @@
                 window.fireEvent('on', + e.eventType, e);
             }
 		};
-		// public - manually call when ga_pokki is included in the background instead of the window/popup because the
+		// public - manually call when ga_storage is included in the background instead of the window/popup because the
 		// window DOM events on the popup won't be heard by the background
 		this._trackFocus = function() {
             var e;
