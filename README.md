@@ -25,6 +25,7 @@ Place these lines with your values in the head of your index.html
     </script>
 
 Call these whenever you want to track a page view or a custom event
+
     ga_pokki._trackPageview('/index', 'optional title');
     ga_pokki._trackEvent('category', 'action', 'label', 'value');
     
