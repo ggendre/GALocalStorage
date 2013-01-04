@@ -9,6 +9,9 @@ Tested succesfully on :
  * Android 4.1, 
  * ios 6
 
+I will test more os versions soon
+
+
 Original Work from the Pokki team 
  * see this repository : https://github.com/blakemachado/Pokki
 
