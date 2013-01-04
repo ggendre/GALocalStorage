@@ -39,11 +39,13 @@ If you are using jQuerymobile, add this to your initialisation to track pages vi
     //google analytics
     $('[data-role=page]').live('pageshow', function (event, ui) {
         console.log('google analytics pageshow')
-    	try {
-    		hash = location.hash;
-    		if (hash && hash.length > 1) {
-    			ga_storage._trackPageview(hash.substr(1));
+        try {
+    		page = location.href.replace(/.*\//,'/')
+    		if (page && page.length > 1) {
+    			console.log('google analytics pageshow url :'+page)
+    			ga_storage._trackPageview(page);
     		} else {
+    			console.log('google analytics pageshow default url')
     			ga_storage._trackPageview();
     		}
     	} catch(err){
