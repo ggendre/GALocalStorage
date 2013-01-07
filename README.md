@@ -6,7 +6,7 @@ GALocalstorage is a Modified version or Google Analytics for Pokki without using
 It use localstorage instead of cookies to store session information so it works great for Phonegap apps.
 
 Tested succesfully on :
- * Android 4.1, 
+ * Android 2.2, 2.3, 4.0, 4.1
  * ios 6
 
 I will test more os versions soon
