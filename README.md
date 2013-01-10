@@ -23,10 +23,9 @@ Example usage:
 
 Place these lines with your values in the head of your index.html
 
-    <script type="text/javascript" src="js/libs/GAPokki.js"></script>
+    <script type="text/javascript" src="js/libs/GALocalStorage.js"></script>
     <script>
-        var GOOGLEACCOUNT='UA-37167369-1'
-        ga_storage._setAccount(GOOGLEACCOUNT);
+        ga_storage._setAccount('UA-37167XXX-1'); //Replace with your own
         ga_storage._setDomain('none');
         ga_storage._trackPageview('/index.html');
         
