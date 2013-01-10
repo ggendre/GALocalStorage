@@ -1,18 +1,19 @@
 /**
- * Modified version or Google Analytics for Pokki without using pokki at all.
+ * Modified version of "Google Analytics for Pokki" to make it usable in PhoneGap.
  * For all details and documentation:
  * https://github.com/ggendre/GALocalStorage
  *
- * @version     1.6
+ * @version     1.0
  * @license     MIT License
- * @author      Guillaume Gendre, Haploid.
+ * @author      Guillaume Gendre, haploid.fr
  *
  * Original Work from Pokki team :
  *              Blake Machado <blake@sweetlabs.com>, SweetLabs, Inc.
  *              Fontaine Shu <fontaine@sweetlabs.com>, SweetLabs, Inc.
  * see this repository : https://github.com/blakemachado/Pokki
  *
- * I just commented out the Pokki stuff for now. help to make it cleaner is welcome.
+ * I just commented out and deleted some of the Pokki stuff for now.
+ * help to make it cleaner is welcome !
  *
  * Example usage:
  * 
@@ -27,7 +28,7 @@
  */
  
 (function() {
-    var VERSION = '1.6';
+    var VERSION = '1.0';
     var IS_DEBUG = false;
     
     var LocalStorage = function(key, initial_value) {
@@ -69,7 +70,6 @@
         var utmcs = 'UTF-8'; // charset
         var utmul = 'en-us'; // language
         var utmdt = '-'; // page title
-        var utmn = 0; // random number
         var utmt = 'event'; // analytics type
         var utmhid = 0; // unique id per session
         
@@ -93,7 +93,6 @@
         var session_cnt = new LocalStorage('ga_storage_session_cnt');
         var f_session   = new LocalStorage('ga_storage_f_session');
         var l_session   = new LocalStorage('ga_storage_l_session');
-        var first_run   = new LocalStorage('ga_storage_first_run');
         var visitor_custom_vars = new LocalStorage('ga_storage_visitor_custom_vars');
         
         var c_session = 0;
@@ -167,117 +166,9 @@
             if (l_session._get() == null) {
                 l_session._set(c_session);
             }
-            
-            // initialize session when popup opens
-            /*
-            pokki.addEventListener('showing', function() {
-                // don't run the first time
-                if(initialized) {
-                    c_session = (new Date()).getTime();
-                    session_cnt._set(parseInt(session_cnt._get()) + 1);
-                    
-                    if(IS_DEBUG) console.log('new current session time', c_session);
-                }
-                else {
-                    initialized = true;
-                }
-            });
-            */
-            
-			var state = 'hidden';
-			var latestState = '';
 
-			var handleState = function() {
-			
-				if(!utmac || !utmhn) return;
-
-				if(IS_DEBUG) console.log('current state:', state, 'latest state:', latestState);
-
-				switch(state) {
-
-					case 'shown':
-						if (latestState=='hidden') {
-							that._trackPageview(last_nav_url);
-						}
-	                    that._trackEvent('User', 'IconClick');
-	                    // track first run
-	                    if(first_run._get() == null) {
-	                        that._trackEvent('User', 'FirstRun');
-	                        first_run._set(1);
-	                    }
-						break;
-
-					case 'hidden':
-						that._trackPageview(event_map.hidden.path);
-						that._trackEvent('User', event_map.hidden.event);
-						//reset session when popup closes
-						reset_session(c_session);
-						break;
-
-					case 'focused':
-						that._trackPageview(last_nav_url);
-						break;
-
-					case 'blurred':
-						that._trackPageview(event_map.blurred.path);
-						break;
-				
-				}
-
-				latestState = state;
-			
-			};
-
-			/*
-            pokki.addEventListener('hidden', function() {
-            	state = 'hidden';
-            	clearTimeout(timer);
-            	timer = setTimeout(handleState,200);
-			});
-
-            pokki.addEventListener('shown', function() {
-            	state = 'shown';
-            	clearTimeout(timer);
-            	timer = setTimeout(handleState,200);
-			});
-			
-			// The following window events are only fired IF this ga_storage library is included in the popup window.
-			// If it's in the background, the window will have to manually make pokki.rpc calls to log the focus and blur events.
-			window.addEventListener('focus',function() {
-				state = 'focused';
-            	clearTimeout(timer);
-            	timer = setTimeout(handleState,200);
-			});
-
-			window.addEventListener('blur',function() {
-				state = 'blurred';
-            	clearTimeout(timer);
-            	timer = setTimeout(handleState,200);
-			});
-			*/
         }
-        
-        // public
-        /* commented out until it is adapted to work without Pokki
-        this._initPlatformCustomVar = function(customVarSlot) {
-            
-            customVarSlot = customVarSlot || 1; // defaults to 1 unless need to specify which
-            
-            try {
-                var pfv = 'pfv'+pokki.getPlatformVersion();
-                var pov = '_pov'+pokki.getManifestVersion();
-                var src = '_src'+pokki.getInstallSource();
-                var cpn = '_cpn'+pokki.getInstallCampaign();
-                var value = pfv + pov + src + cpn;
-            
-                that._setCustomVar(customVarSlot, 'version-campaign', value);
-            }
-            catch(e) {
-                that._setCustomVar(customVarSlot, 'version-campaign', 'pfv_pov_src_cpn');
-            }
-        };
-        */
-        
+
         // public
         this._setAccount = function(account_id) {
             if(IS_DEBUG) console.log(account_id);
@@ -308,7 +199,7 @@
             };
             
             custom_vars[index] = params;
-            
+
             // store if custom var is visitor-level (1)
             if(opt_scope === 1) {
                 var vcv = visitor_custom_vars._get() ? JSON.parse(visitor_custom_vars._get()) : ['dummy'];
@@ -452,46 +343,6 @@
             var img = new Image();
             img.src = url;
         };
-		
-		// public - manually call when ga_storage is included in the background instead of the window/popup because the
-		// window DOM events on the popup won't be heard by the background
-		this._trackBlur = function() {
-            var e;
-            if(document.createEvent) {
-                e = document.createEvent('HTMLEvents');
-                e.initEvent('blur', true, true);
-            } 
-            else {
-                e = document.createEventObject();
-                e.eventType = 'blur';
-            }
-            
-            if(document.createEvent) {
-                window.dispatchEvent(e);
-            }
-            else {
-                window.fireEvent('on', + e.eventType, e);
-            }
-		};
-		// public - manually call when ga_storage is included in the background instead of the window/popup because the
-		// window DOM events on the popup won't be heard by the background
-		this._trackFocus = function() {
-            var e;
-            if(document.createEvent) {
-                e = document.createEvent('HTMLEvents');
-                e.initEvent('focus', true, true);
-            } 
-            else {
-                e = document.createEventObject();
-                e.eventType = 'focus';
-            }
-            
-            if(document.createEvent) {
-                window.dispatchEvent(e);
-            }
-            else {
-                window.fireEvent('on', + e.eventType, e);
-            }
-		};
+
     };
 })();
