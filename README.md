@@ -7,7 +7,7 @@ It use localstorage instead of cookies to store session information so it works 
 
 Tested succesfully on :
  * Android 2.2, 2.3, 4.0, 4.1
- * ios 6
+ * ios 5, 6
 
 I will test more os versions soon
 
