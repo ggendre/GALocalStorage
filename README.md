@@ -60,6 +60,6 @@ Which Analytics type to choose?
 
 In the Google Analytics settings, be sure to choose the "web site" type of account :
 
-![Choose web site account](https://f.cloud.github.com/assets/2635194/81629/009eac9c-6349-11e2-9882-0a337be9053f.jpg)
+<img src="https://f.cloud.github.com/assets/2635194/81629/009eac9c-6349-11e2-9882-0a337be9053f.jpg"/>
 
 You will then have the account identifier (looks like 'UA-37167XXX-1').
