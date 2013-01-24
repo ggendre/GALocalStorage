@@ -57,6 +57,7 @@ If you are using jQuerymobile, add this to your initialisation to track pages vi
     
     
 Which Analytics type to choose?
+===============================
 
 In the Google Analytics settings, be sure to choose the "web site" type of account :
 
