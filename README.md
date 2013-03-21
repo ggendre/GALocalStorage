@@ -21,39 +21,21 @@ I just commented out the Pokki stuff for now. help to make it cleaner is welcome
 Example usage:
 ==============
 
-Place these lines with your values in the head of your index.html
+In short, just place these lines with your values in the head of your index.html
 
     <script type="text/javascript" src="js/libs/GALocalStorage.js"></script>
     <script>
         ga_storage._setAccount('UA-37167XXX-1'); //Replace with your own
-        ga_storage._setDomain('none');
         ga_storage._trackPageview('/index.html');
         
     </script>
 
-Call these whenever you want to track a page view or a custom event
+And then call this whenever you want to track a page view
 
     ga_storage._trackPageview('/index', 'optional title');
-    ga_storage._trackEvent('category', 'action', 'label', 'value');
     
-If you are using jQuerymobile, add this to your initialisation to track pages views 
-
-    //google analytics
-    $('[data-role=page]').live('pageshow', function (event, ui) {
-        console.log('google analytics pageshow')
-        try {
-    		page = location.href.replace(/.*\//,'/')
-    		if (page && page.length > 1) {
-    			console.log('google analytics pageshow url :'+page)
-    			ga_storage._trackPageview(page);
-    		} else {
-    			console.log('google analytics pageshow default url')
-    			ga_storage._trackPageview();
-    		}
-    	} catch(err){
-    		console.log('error google analytics '+err)
-    	}
-    });
+    
+You can also use custom events and there is a jQueryMobile ready snippet in the (How to use)[wiki/How-to-use] page
     
     
 Which Analytics type to choose?
@@ -64,3 +46,6 @@ In the Google Analytics settings, be sure to choose the "web site" type of accou
 <img src="https://f.cloud.github.com/assets/2635194/81629/009eac9c-6349-11e2-9882-0a337be9053f.jpg"/>
 
 You will then have the account identifier (looks like 'UA-37167XXX-1').
+
+If you are having troubles, see the (How to setup Google Analytic)[swiki/How-to-set-up-Google-Analytics)] wiki page
+
