@@ -35,7 +35,7 @@ And then call this whenever you want to track a page view
     ga_storage._trackPageview('/index', 'optional title');
     
     
-You can also use custom events and there is a jQueryMobile ready snippet in the [How to use](wiki/How-to-use) page
+You can also use custom events and there is a jQueryMobile ready snippet in the [How to use](https://github.com/ggendre/GALocalStorage/wiki/How-to-use) page
 
 
 Which Analytics type to choose?
@@ -47,5 +47,5 @@ In the Google Analytics settings, be sure to choose the "web site" type of accou
 
 You will then have the account identifier (looks like 'UA-37167XXX-1').
 
-If you are having troubles, see the [How to set up your Google Analytics](wiki/How-to-set-up-Google-Analytics) wiki page
+If you are having troubles, see the [How to set up your Google Analytics](https://github.com/ggendre/GALocalStorage/wiki/How-to-set-up-Google-Analytics) wiki page
 
