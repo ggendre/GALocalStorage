@@ -3,7 +3,7 @@
  * For all details and documentation:
  * https://github.com/ggendre/GALocalStorage
  *
- * @version     1.0
+ * @version     1.1
  * @license     MIT License
  * @author      Guillaume Gendre, haploid.fr
  *
@@ -12,14 +12,10 @@
  *              Fontaine Shu <fontaine@sweetlabs.com>, SweetLabs, Inc.
  * see this repository : https://github.com/blakemachado/Pokki
  *
- * I just commented out and deleted some of the Pokki stuff for now.
- * help to make it cleaner is welcome !
- *
  * Example usage:
  *
  * - Place these two lines with your values in a script tag in the head of index.html
  *   ga_storage._setAccount('--GA-ACCOUNT-ID--');
- *   ga_storage._setDomain('--YOUR-DOMAIN--');
  *   ga_storage._trackPageview('/index.html');
  *
  * - Call these whenever you want to track a page view or a custom event
