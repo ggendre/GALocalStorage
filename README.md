@@ -35,7 +35,7 @@ And then call this whenever you want to track a page view
     ga_storage._trackPageview('/index', 'optional title');
     
     
-You can also use custom events and there is a jQueryMobile ready snippet in the [How to use](https://github.com/ggendre/GALocalStorage/wiki/How-to-use) page
+You can also use custom events and use SSL, there is also a jQueryMobile ready snippet in the [How to use](https://github.com/ggendre/GALocalStorage/wiki/How-to-use) page
 
 
 Which Analytics type to choose?
