@@ -56,14 +56,15 @@
     ga_storage = new function() {
         var that = this;
         var initialized = false;
-        
-        var tracking_code_url = 'http://www.google-analytics.com/ga.js';
-        var beacon_url = 'http://www.google-analytics.com/__utm.gif';
+
+	    var ga_url = 'http://www.google-analytics.com';
+	    var ga_ssl_url = 'https://ssl.google-analytics.com';
         var last_url = '/'; // used to keep track of last page view logged to pass forward to subsequent events tracked
         var last_nav_url = '/'; // used to keep track of last page actually visited by the user (not popup_hidden or popup_blurred!)
         var last_page_title = '-'; // used to keep track of last page view logged to pass forward to subsequent events tracked
         var timer; // used for blur/focus state changes
-        
+
+	    var ga_use_ssl = false; // set by calling _enableSSL or _disableSSL
         var utmac = false; // set by calling _setAccount
         var utmhn = false; // set by calling _setDomain
         var utmwv = '4.3'; // tracking api version
@@ -99,7 +100,13 @@
         var custom_vars = visitor_custom_vars._get() ? JSON.parse(visitor_custom_vars._get()) : ['dummy'];
         
         var request_cnt = 0;
-        
+
+	    function beacon_url() {
+          return (
+            ga_use_ssl ? ga_ssl_url : ga_url
+          ) + '/__utm.gif';
+        }
+
         function rand(min, max) {
             return min + Math.floor(Math.random() * (max - min));
         }
@@ -107,6 +114,9 @@
         function get_random() {
             return rand(100000000,999999999);
         }
+
+
+
         
         function return_cookies(source, medium, campaign) {
             source = source || '(direct)';
@@ -169,6 +179,18 @@
 
         }
 
+	    // public
+        this._enableSSL = function() {
+            if(IS_DEBUG) console.log("Enabling SSL");
+            ga_use_ssl = true;
+        };
+
+        // public
+        this._disableSSL = function() {
+            if(IS_DEBUG) console.log("Disabling SSL");
+            ga_use_ssl = false;
+        };
+
         // public
         this._setAccount = function(account_id) {
             if(IS_DEBUG) console.log(account_id);
@@ -213,6 +235,22 @@
             
             return true;
         };
+
+	    // public
+        this._deleteCustomVar = function(index) {
+            if(index < 1 || index > 5) return false;
+            var scope = custom_vars[index] && custom_vars[index].scope;
+            custom_vars[index] = null;
+            if(scope === 1) {
+                var vcv = visitor_custom_vars._get() ? JSON.parse(visitor_custom_vars._get()) : ['dummy'];
+                vcv[index] = null;
+                visitor_custom_vars._set(JSON.stringify(vcv));
+            }
+            if(IS_DEBUG) {
+                console.log(custom_vars);
+            }
+            return true;
+        };
         
         // public
         this._trackPageview = function(path, title, source, medium, campaign) {
@@ -237,19 +275,30 @@
                 var names = '';
                 var values = '';
                 var scopes = '';
+	            var last_slot = 0;
                 
                 for(var i = 1; i < custom_vars.length; i++) {
-                    names += custom_vars[i].name;
-                    values += custom_vars[i].value;
-                    scopes += (custom_vars[i].scope == null ? 3 : custom_vars[i].scope);
-                    
-                    if(i+1 < custom_vars.length) {
-                        names += '*';
-                        values += '*';
-                        scopes += '*';
+                    if(custom_vars[i])
+                        last_slot = i;
+                }
+	            for(i = 1; i < custom_vars.length; i++) {
+                    if(custom_vars[i]) {
+                        var slotPrefix = '';
+                        if(!custom_vars[i-1])
+                            slotPrefix = i + '!';
+
+                        names += slotPrefix + custom_vars[i].name;
+                        values += slotPrefix + custom_vars[i].value;
+                        scopes += slotPrefix + (custom_vars[i].scope == null ? 3 : custom_vars[i].scope);
+
+                        if(i < last_slot) {
+                            names += '*';
+                            values += '*';
+                            scopes += '*';
+                        }
                     }
                 }
-                
+
                 event += '8(' + names + ')';
                 event += '9(' + values + ')';
                 event += '11(' + scopes + ')';
@@ -278,7 +327,7 @@
                 params.utme = event;
             }
             
-            var url = beacon_url + generate_query_string(params);
+            var url = beacon_url() + generate_query_string(params);
             var img = new Image();
             img.src = url;
         };
@@ -307,16 +356,28 @@
                 var names = '';
                 var values = '';
                 var scopes = '';
+	            var last_slot = 0;
                 
                 for(var i = 1; i < custom_vars.length; i++) {
-                    names += custom_vars[i].name;
-                    values += custom_vars[i].value;
-                    scopes += (custom_vars[i].scope == null ? 3 : custom_vars[i].scope);
-                    
-                    if(i+1 < custom_vars.length) {
-                        names += '*';
-                        values += '*';
-                        scopes += '*';
+                    if(custom_vars[i])
+                        last_slot = i;
+                }
+
+                for(var i = 1; i < custom_vars.length; i++) {
+                    if(custom_vars[i]) {
+                        var slotPrefix = '';
+                        if(!custom_vars[i-1])
+                            slotPrefix = i + '!';
+
+                        names += slotPrefix + custom_vars[i].name;
+                        values += slotPrefix + custom_vars[i].value;
+                        scopes += slotPrefix + (custom_vars[i].scope == null ? 3 : custom_vars[i].scope);
+
+                        if(i < last_slot) {
+                            names += '*';
+                            values += '*';
+                            scopes += '*';
+                        }
                     }
                 }
                 
@@ -339,7 +400,7 @@
                 utmac: utmac,
                 utmcc: return_cookies(source, medium, campaign)
             };
-            var url = beacon_url + generate_query_string(params);
+            var url = beacon_url() + generate_query_string(params);
             var img = new Image();
             img.src = url;
         };
