@@ -16,7 +16,9 @@ Original Work from the Pokki team
 I just commented out the Pokki stuff for now. help to make it cleaner is welcome.
 
 # Install from bower
+````
 bower install ga-localstorage -S
+```
 
 # Example usage:
 In short, just place these lines with your values in the head of your index.html
