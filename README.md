@@ -3,6 +3,35 @@ GALocalstorage is a Modified version or Google Analytics for Pokki without using
 
 It use localstorage instead of cookies to store session information so it works great for Phonegap apps.
 
+# DEPRECATION WARNING
+
+**Google Analytics now have an [options explained here](https://developers.google.com/analytics/devguides/collection/analyticsjs/cookies-user-id#automatic_cookie_domain_configuration) to use LocalStorage instead of cookies and there is also a hack to make it work in webviews (`file://` urls). So instead of using this code you should do this :**
+
+
+```
+// THIS IS FOR LOCALSTORAGE
+var GA_LOCAL_STORAGE_KEY = 'ga:clientId';
+ga('create', 'UA-XXXXX-Y', {
+  'storage': 'none',
+  'clientId': localStorage.getItem(GA_LOCAL_STORAGE_KEY)
+});
+ga(function(tracker) {
+  localStorage.setItem(GA_LOCAL_STORAGE_KEY, tracker.get('clientId'));
+});
+
+// THIS IS FOR FILE URL SUPPORT
+ga('set', 'checkProtocolTask', function(){ /* noop */});
+
+// And then as usual...
+ga('send', 'pageview');
+```
+
+---
+
+# Previous documentation below
+
+## Tests
+
 Tested succesfully on :
 - Android 2.2, 2.3, 4.0, 4.x
 - ios 5, 6
@@ -15,12 +44,12 @@ Original Work from the Pokki team
 
 I just commented out the Pokki stuff for now. help to make it cleaner is welcome.
 
-# Install from bower
-````
+## Install from bower
+```
 bower install ga-localstorage -S
 ```
 
-# Example usage:
+## Example usage:
 In short, just place these lines with your values in the head of your index.html
 
 ```js
@@ -40,7 +69,7 @@ ga_storage._trackPageview('/index', 'optional title');
 
 You can also use custom events and use SSL, there is also a jQueryMobile ready snippet in the [How to use](https://github.com/ggendre/GALocalStorage/wiki/How-to-use) page
 
-# Which Analytics type to choose?
+## Which Analytics type to choose?
 In the Google Analytics settings, be sure to choose the "web site" type of account :
 
 <img src="https://f.cloud.github.com/assets/2635194/81629/009eac9c-6349-11e2-9882-0a337be9053f.jpg"/>
