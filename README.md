@@ -1,5 +1,5 @@
 # GALocalstorage
-GALocalstorage was a Modified version or Google Analytics for Pokki without using pokki at all. It used localstorage instead of cookies to store session information so it worked great for Phonegap or other hybrid apps.
+GALocalstorage was a modified version of "Google Analytics for Pokki" without using pokki at all. It used localstorage instead of cookies to store session information so it worked great for Phonegap or other hybrid apps.
 
 # DEPRECATION WARNING
 
